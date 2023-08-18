@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 echo "This runs only for the main branch."
-                # Add your main branch specific steps here.
+                # Add your main branch-specific steps here.
                 '''
             }
         }
@@ -38,10 +38,10 @@ pipeline {
             echo 'This will always run'
         }
         success {
-            echo 'Run succeeded!'
+            githubNotify status: 'SUCCESS', context: 'Test', description: 'All tests passed.'
         }
         failure {
-            echo 'Something went wrong!'
+            githubNotify status: 'FAILURE', context: 'Test', description: 'Some tests failed.'
         }
     }
 }
