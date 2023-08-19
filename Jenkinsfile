@@ -1,48 +1,27 @@
 pipeline {
-    agent {
-        node {
-            label 'AGENT-01'
-        }
+    agent{
+        label 'AGENT-01'
     }
-
-    stages {
+    stages{
         stage('Checkout') {
             steps {
-                checkout scm 
+                checkout scm
             }
         }
-
-        stage('Run Shell Script') {
-            steps {
-                sh '''#!/bin/bash
-                echo "This runs for all branches."
+        
+        stage('Build'){
+            steps{
+                sh '''
+                docker build -t jdk-image:01 .
                 '''
+                }
             }
-        }
-
-        stage('Main Branch Specific Steps') {
-            when {
-                branch 'main'
-            }
+        stage('Scan Image') {
             steps {
-                sh '''#!/bin/bash
-                echo "This runs only for the main branch."
-                # Add your main branch-specific steps here.
-                '''
+            sh '''
+            sudo trivy image jdk-image:01
+            '''
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'This will always run'
-        }
-        success {
-            githubNotify status: 'SUCCESS', context: 'Test', description: 'All tests passed.'
-        }
-        failure {
-            githubNotify status: 'FAILURE', context: 'Test', description: 'Some tests failed.'
         }
     }
 }
-
