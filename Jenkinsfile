@@ -75,7 +75,7 @@ pipeline {
                 script {
                     try {
                         def imageNameAndTag = "${imageName}:${versionTag}"
-                        SlimImage.slimImage(imageNameAndTag)
+                        slimImage.slimImage(imageNameAndTag)
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
                         error("Failed to slim Docker image: ${e.message}")
