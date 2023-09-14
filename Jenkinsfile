@@ -67,22 +67,6 @@ pipeline {
                 }
             }
         }
-        stage('Slim Docker Image') {
-            when {
-                expression { true }
-            }
-            steps {
-                script {
-                    try {
-                        def imageNameAndTag = "${imageName}:${versionTag}"
-                        slimImage(imageNameAndTag)
-                    } catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
-                        error("Failed to slim Docker image: ${e.message}")
-                    }
-                }
-            }
-        }
     }
 
     post {
