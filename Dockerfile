@@ -11,5 +11,7 @@ RUN apt-get update && \
 
 COPY files/spring-petclinic-2.7.3.jar /usr/src/spring-petclinic-2.7.3.jar
 
+EXPOSE 8080
+
 WORKDIR /app
 
