@@ -1,17 +1,19 @@
-FROM ubuntu:latest
+# Use a minimal base image to reduce the image size
+FROM ubuntu:20.04
 
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-ENV MAVEN_HOME /usr/share/maven
-ENV PATH $JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
+# Set environment variables
+ENV M2_HOME=/opt/apache-maven-3.9.4
+ENV PATH=$M2_HOME/bin:$PATH
+ENV DEBIAN_FRONTEND=noninteractive
 
+# Install required packages and clean up
 RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk maven && \
-    apt-get clean && \
+    apt-get install -y --no-install-recommends git curl lsb-release gnupg wget openjdk-17-jdk docker.io python3-pip awscli && \
     rm -rf /var/lib/apt/lists/*
 
-COPY files/spring-petclinic-2.7.3.jar /usr/src/spring-petclinic-2.7.3.jar
+# Install Maven
+RUN wget -q https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.tar.gz -O /tmp/apache-maven-3.9.4-bin.tar.gz && \
+    tar -xf /tmp/apache-maven-3.9.4-bin.tar.gz -C /opt/ && \
+    rm /tmp/apache-maven-3.9.4-bin.tar.gz
 
-EXPOSE 8080
-
-WORKDIR /app
 
